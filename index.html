@@ -1,0 +1,30 @@
+<script>
+    (async ()=>{
+        const urlParams = new URLSearchParams(window.location.search)
+        const res = await fetch(urlParams.get("url") || "https://gist.githubusercontent.com/MattIPv4/045239bc27b16b2bcf7a3a9a4648c08a/raw/2411e31293a35f3e565f61e7490a806d4720ea7e/bee%2520movie%2520script")
+        const text = await res.text()
+        const dividedText = text.split("\n")
+        const msg = new SpeechSynthesisUtterance();
+        msg.lang = "en"
+        msg.rate = 1.5
+        for (const line of dividedText) {
+            msg.text = line
+            document.body.innerHTML += line+"<br>"
+            document.body.scrollTo({top: document.body.scrollHeight, behavior: "smooth"})
+            if(!line) continue
+            document.title = line
+            window.speechSynthesis.speak(msg)
+            await new Promise(r=>msg.addEventListener("end", r, {once: true}))
+        }
+    })()
+</script>
+<style>
+    body{
+        font-size: 2em;
+        margin: 0 auto;
+        margin-bottom: 40vh;
+        width: 100vw;
+        max-width: 800px;
+        text-align: justify;
+    }
+</style>
